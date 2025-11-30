@@ -52,6 +52,10 @@ const App: React.FC = () => {
   const handleNavClick = (page: Page) => {
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
   };
 
   return (
@@ -143,11 +147,20 @@ const App: React.FC = () => {
         {/* Left Col: Sidebar / Nav */}
         <AnimatePresence>
         {isSidebarOpen && (
-            <motion.aside 
+            <>
+            {/* Mobile backdrop */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            />
+            <motion.aside
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 300, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
-                className="border-r border-omarchy-gray/30 bg-omarchy-dark/30 overflow-y-auto hidden md:block"
+                className="border-r border-omarchy-gray/30 bg-omarchy-dark md:bg-omarchy-dark/30 overflow-y-auto fixed md:relative inset-y-0 left-0 z-50 md:z-auto"
             >
                <div className="p-6 space-y-8">
                 <div className="space-y-4">
@@ -205,6 +218,7 @@ const App: React.FC = () => {
                 )}
                </div>
             </motion.aside>
+            </>
         )}
         </AnimatePresence>
 
