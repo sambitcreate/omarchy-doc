@@ -18,6 +18,7 @@ export const WorkspaceSimulator: React.FC = () => {
   const [activeHint, setActiveHint] = useState<string | null>(null);
   const [isActive, setIsActive] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Helper to add windows
   const addWindow = (type: WindowNode['type']) => {
@@ -92,11 +93,13 @@ export const WorkspaceSimulator: React.FC = () => {
        setState(prev => ({ ...prev, windows: newWindows }));
        triggerHint('Swapped Windows');
   };
-
   const triggerHint = (text: string) => {
     setActiveHint(text);
-    // Clear existing timeout if any (simple debounce)
-    setTimeout(() => setActiveHint(null), 2000);
+    // Clear existing timeout if any to prevent memory leaks
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => setActiveHint(null), 2000);
   };
 
   // Keyboard Handler
@@ -149,6 +152,15 @@ export const WorkspaceSimulator: React.FC = () => {
           window.removeEventListener('keyup', handleKeyUp);
       };
   }, [isActive, state, activeKeys]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
 
   const getIcon = (type: string) => {
