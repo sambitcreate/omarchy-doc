@@ -104,8 +104,6 @@ const App: React.FC = () => {
                 {isSidebarOpen ? <Menu size={20} /> : <Menu size={20} />}
             </button>
             <div className="flex items-center text-xs md:text-sm text-omarchy-gray whitespace-nowrap overflow-x-auto no-scrollbar">
-                <span className="hover:text-omarchy-fg cursor-pointer">All books</span>
-                <ChevronRight size={12} className="mx-2" />
                 <span className="hover:text-omarchy-fg cursor-pointer font-bold text-omarchy-fg">The Omarchy Manual</span>
                 <ChevronRight size={12} className="mx-2" />
                 <span className="text-omarchy-accent">{activePage}</span>
