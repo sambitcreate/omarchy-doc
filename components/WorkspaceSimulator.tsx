@@ -190,7 +190,12 @@ export const WorkspaceSimulator: React.FC = () => {
     <div 
         ref={containerRef}
         onClick={() => { setIsActive(true); containerRef.current?.focus(); }}
-        onBlur={() => setIsActive(false)}
+        onBlur={(e) => {
+          // Only deactivate if focus is moving outside the container entirely
+          if (!containerRef.current?.contains(e.relatedTarget as Node)) {
+            setIsActive(false);
+          }
+        }}
         tabIndex={0}
         className={`
             border-2 transition-colors duration-300 outline-none
