@@ -24,6 +24,19 @@
   animation: spin-slow 10s linear infinite;
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
 /* Custom focus styles */
 .focus-visible:focus-visible {
   outline: 2px solid rgb(var(--color-accent));

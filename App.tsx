@@ -630,6 +630,11 @@ const App: React.FC = () => {
             <span className="font-bold text-omarchy-bg bg-omarchy-green px-1">NORMAL</span>
             <span className="text-omarchy-gray">omarchy-manual</span>
          </div>
+         <div className="flex-1 overflow-hidden mx-4 hidden md:block">
+            <div className="whitespace-nowrap animate-marquee text-omarchy-gray/50 text-[8px] italic">
+               This website was made for Sambit mainly for him to remind himself of the goddamn Omarchy keybinds
+            </div>
+         </div>
          <div className="flex gap-4 text-omarchy-gray">
             <span className="hidden sm:inline">utf-8</span>
             <span className="uppercase">{currentTheme}</span>
