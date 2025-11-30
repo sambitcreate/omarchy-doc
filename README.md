@@ -156,9 +156,4 @@ The application includes 14 carefully crafted themes:
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🙏 Acknowledgments
 
-- Built with modern web technologies for optimal performance
-- Inspired by the need for comprehensive keyboard-driven documentation
-- Theme colors carefully selected for readability and aesthetics
-- Icons provided by Lucide React for consistent design language
