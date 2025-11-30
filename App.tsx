@@ -52,6 +52,10 @@ const App: React.FC = () => {
   const handleNavClick = (page: Page) => {
     setActivePage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+    }
   };
 
   return (
@@ -104,8 +108,6 @@ const App: React.FC = () => {
                 {isSidebarOpen ? <Menu size={20} /> : <Menu size={20} />}
             </button>
             <div className="flex items-center text-xs md:text-sm text-omarchy-gray whitespace-nowrap overflow-x-auto no-scrollbar">
-                <span className="hover:text-omarchy-fg cursor-pointer">All books</span>
-                <ChevronRight size={12} className="mx-2" />
                 <span className="hover:text-omarchy-fg cursor-pointer font-bold text-omarchy-fg">The Omarchy Manual</span>
                 <ChevronRight size={12} className="mx-2" />
                 <span className="text-omarchy-accent">{activePage}</span>
@@ -145,11 +147,20 @@ const App: React.FC = () => {
         {/* Left Col: Sidebar / Nav */}
         <AnimatePresence>
         {isSidebarOpen && (
-            <motion.aside 
+            <>
+            {/* Mobile backdrop */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsSidebarOpen(false)}
+                className="fixed inset-0 bg-black/50 z-40 md:hidden"
+            />
+            <motion.aside
                 initial={{ width: 0, opacity: 0 }}
                 animate={{ width: 300, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
-                className="border-r border-omarchy-gray/30 bg-omarchy-dark/30 overflow-y-auto hidden md:block"
+                className="border-r border-omarchy-gray/30 bg-omarchy-dark md:bg-omarchy-dark/30 overflow-y-auto fixed md:relative inset-y-0 left-0 z-50 md:z-auto"
             >
                <div className="p-6 space-y-8">
                 <div className="space-y-4">
@@ -207,6 +218,7 @@ const App: React.FC = () => {
                 )}
                </div>
             </motion.aside>
+            </>
         )}
         </AnimatePresence>
 
