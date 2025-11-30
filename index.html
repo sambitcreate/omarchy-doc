@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Omarchy Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            colors: {
+              omarchy: {
+                bg: 'rgb(var(--color-bg) / <alpha-value>)',
+                fg: 'rgb(var(--color-fg) / <alpha-value>)',
+                accent: 'rgb(var(--color-accent) / <alpha-value>)',
+                green: 'rgb(var(--color-green) / <alpha-value>)',
+                red: 'rgb(var(--color-red) / <alpha-value>)',
+                yellow: 'rgb(var(--color-yellow) / <alpha-value>)',
+                purple: 'rgb(var(--color-purple) / <alpha-value>)',
+                gray: 'rgb(var(--color-gray) / <alpha-value>)',
+                dark: 'rgb(var(--color-dark) / <alpha-value>)'
+              }
+            },
+            animation: {
+              'blink': 'blink 1s step-end infinite',
+              'crt-flicker': 'flicker 0.15s infinite',
+            },
+            keyframes: {
+              blink: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0' },
+              },
+              flicker: {
+                '0%': { opacity: '0.97' },
+                '100%': { opacity: '1' },
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      :root {
+        --color-bg: 17 17 17;
+        --color-fg: 235 219 178;
+        --color-accent: 69 133 136;
+        --color-green: 152 151 26;
+        --color-red: 204 36 29;
+        --color-yellow: 215 153 33;
+        --color-purple: 177 98 134;
+        --color-gray: 146 131 116;
+        --color-dark: 40 40 40;
+      }
+      
+      body {
+        background-color: rgb(var(--color-bg));
+        color: rgb(var(--color-fg));
+      }
+      /* Custom scrollbar for that terminal feel */
+      ::-webkit-scrollbar {
+        width: 10px;
+        background: rgb(var(--color-dark));
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgb(var(--color-gray));
+        border: 1px solid rgb(var(--color-bg));
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

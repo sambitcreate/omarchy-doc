@@ -1,0 +1,5 @@
+{
+  "name": "Omarchy Keybind Master",
+  "description": "An interactive, terminal-styled cheat sheet and visualizer for Omarchy window manager keybindings.",
+  "requestFramePermissions": []
+}
