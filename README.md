@@ -152,33 +152,9 @@ The application includes 14 carefully crafted themes:
 - **Super + J**: Toggle layout
 - **Arrow Keys**: Navigate between windows
 
-## 🐛 Known Issues
-
-- Missing `index.css` file reference (causes 404 error)
-- Some duplicate key bindings in the documentation
-- Memory leak potential in timeout handling
-- Accessibility improvements needed for screen readers
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-### Development Guidelines
-- Use TypeScript for all new code
-- Follow the existing code style and conventions
-- Test thoroughly before submitting
-- Update documentation as needed
-
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
-
-## 🔗 Links
-
-- **Live Demo**: [View the application](https://ai.studio/apps/drive/1LkHNAl06IF1h3mhzf2XMNcwQvnHg0f-N)
-- **Omarchy Project**: Learn more about the Omarchy Linux distribution
-- **Issues**: Report bugs or request features
-- **Discussions**: Community discussions and support
 
 ## 🙏 Acknowledgments
 
