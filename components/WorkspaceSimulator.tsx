@@ -20,79 +20,6 @@ export const WorkspaceSimulator: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Helper to add windows
-  const addWindow = (type: WindowNode['type']) => {
-    if (state.windows.length >= 6) {
-        triggerHint('Max windows reached!');
-        return;
-    }
-    const newId = Math.random().toString(36).substr(2, 9);
-    const title = type === 'terminal' ? 'Alacritty' : type === 'browser' ? 'Firefox' : type === 'files' ? 'Thunar' : 'Btop';
-    setState(prev => ({
-      ...prev,
-      windows: [...prev.windows, { id: newId, type, title }],
-      activeWindowId: newId
-    }));
-    triggerHint(`Opened ${title}`);
-  };
-
-  const closeActiveWindow = () => {
-    if (!state.activeWindowId) {
-        if (state.windows.length === 0) {
-           triggerHint('Already empty!');
-        } else {
-           triggerHint('No active window');
-        }
-        return;
-    }
-    setState(prev => {
-        const remaining = prev.windows.filter(w => w.id !== prev.activeWindowId);
-        return {
-            ...prev,
-            windows: remaining,
-            activeWindowId: remaining.length > 0 ? remaining[remaining.length - 1].id : null
-        };
-    });
-    triggerHint('Window Closed (Super+W)');
-  };
-
-  const exitSession = () => {
-      setState(prev => ({ ...prev, windows: [], activeWindowId: null }));
-      triggerHint('Session Reset (Super+Shift+Q)');
-  };
-
-  const toggleLayout = () => {
-    setState(prev => ({
-      ...prev,
-      layout: prev.layout === 'horizontal' ? 'vertical' : 'horizontal'
-    }));
-    triggerHint(`Layout: ${state.layout === 'horizontal' ? 'Vertical' : 'Horizontal'} (Super+J)`);
-  };
-
-  const cycleFocus = (direction: 'next' | 'prev') => {
-      if (state.windows.length < 2) return;
-      const currentIndex = state.windows.findIndex(w => w.id === state.activeWindowId);
-      let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
-      
-      if (nextIndex >= state.windows.length) nextIndex = 0;
-      if (nextIndex < 0) nextIndex = state.windows.length - 1;
-      
-      setState(prev => ({ ...prev, activeWindowId: prev.windows[nextIndex].id }));
-  };
-
-  const swapWindow = () => {
-       if (state.windows.length < 2 || !state.activeWindowId) return;
-       const idx = state.windows.findIndex(w => w.id === state.activeWindowId);
-       // Simple swap with next
-       const nextIdx = (idx + 1) % state.windows.length;
-       const newWindows = [...state.windows];
-       const temp = newWindows[idx];
-       newWindows[idx] = newWindows[nextIdx];
-       newWindows[nextIdx] = temp;
-       
-       setState(prev => ({ ...prev, windows: newWindows }));
-       triggerHint('Swapped Windows');
-  };
   const triggerHint = (text: string) => {
     setActiveHint(text);
     // Clear existing timeout if any to prevent memory leaks
@@ -102,17 +29,101 @@ export const WorkspaceSimulator: React.FC = () => {
     timeoutRef.current = setTimeout(() => setActiveHint(null), 2000);
   };
 
+  // Helper to add windows - using functional setState to avoid stale closures
+  const addWindow = (type: WindowNode['type']) => {
+    setState(prev => {
+      if (prev.windows.length >= 6) {
+        triggerHint('Max windows reached!');
+        return prev;
+      }
+      const newId = Math.random().toString(36).slice(2, 11);
+      const title = type === 'terminal' ? 'Alacritty' : type === 'browser' ? 'Firefox' : type === 'files' ? 'Thunar' : 'Btop';
+      triggerHint(`Opened ${title}`);
+      return {
+        ...prev,
+        windows: [...prev.windows, { id: newId, type, title }],
+        activeWindowId: newId
+      };
+    });
+  };
+
+  const closeActiveWindow = () => {
+    setState(prev => {
+      if (!prev.activeWindowId) {
+        if (prev.windows.length === 0) {
+          triggerHint('Already empty!');
+        } else {
+          triggerHint('No active window');
+        }
+        return prev;
+      }
+      const remaining = prev.windows.filter(w => w.id !== prev.activeWindowId);
+      triggerHint('Window Closed (Super+W)');
+      return {
+        ...prev,
+        windows: remaining,
+        activeWindowId: remaining.length > 0 ? remaining[remaining.length - 1].id : null
+      };
+    });
+  };
+
+  const exitSession = () => {
+    setState(prev => ({ ...prev, windows: [], activeWindowId: null }));
+    triggerHint('Session Reset (Super+Shift+Q)');
+  };
+
+  const toggleLayout = () => {
+    setState(prev => {
+      triggerHint(`Layout: ${prev.layout === 'horizontal' ? 'Vertical' : 'Horizontal'} (Super+J)`);
+      return {
+        ...prev,
+        layout: prev.layout === 'horizontal' ? 'vertical' : 'horizontal'
+      };
+    });
+  };
+
+  const cycleFocus = (direction: 'next' | 'prev') => {
+    setState(prev => {
+      if (prev.windows.length < 2) return prev;
+      const currentIndex = prev.windows.findIndex(w => w.id === prev.activeWindowId);
+      let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+      
+      if (nextIndex >= prev.windows.length) nextIndex = 0;
+      if (nextIndex < 0) nextIndex = prev.windows.length - 1;
+      
+      return { ...prev, activeWindowId: prev.windows[nextIndex].id };
+    });
+  };
+
+  const swapWindow = () => {
+    setState(prev => {
+      if (prev.windows.length < 2 || !prev.activeWindowId) return prev;
+      const idx = prev.windows.findIndex(w => w.id === prev.activeWindowId);
+      // Simple swap with next
+      const nextIdx = (idx + 1) % prev.windows.length;
+      const newWindows = [...prev.windows];
+      const temp = newWindows[idx];
+      newWindows[idx] = newWindows[nextIdx];
+      newWindows[nextIdx] = temp;
+      
+      triggerHint('Swapped Windows');
+      return { ...prev, windows: newWindows };
+    });
+  };
+
   // Keyboard Handler
   useEffect(() => {
       const handleKeyDown = (e: KeyboardEvent) => {
           if (!isActive) return;
           
-          const newKeys = new Set(activeKeys);
-          newKeys.add(e.key);
-          setActiveKeys(newKeys);
+          setActiveKeys(prev => {
+            const newKeys = new Set(prev);
+            newKeys.add(e.key);
+            return newKeys;
+          });
 
-          // Meta is "Super"
-          if (e.metaKey || e.altKey) { 
+          // Meta is "Super" key
+          if (e.metaKey) { 
               e.preventDefault();
 
               // Actions
@@ -140,9 +151,11 @@ export const WorkspaceSimulator: React.FC = () => {
       };
 
       const handleKeyUp = (e: KeyboardEvent) => {
-          const newKeys = new Set(activeKeys);
-          newKeys.delete(e.key);
-          setActiveKeys(newKeys);
+          setActiveKeys(prev => {
+            const newKeys = new Set(prev);
+            newKeys.delete(e.key);
+            return newKeys;
+          });
       };
 
       window.addEventListener('keydown', handleKeyDown);
@@ -151,7 +164,7 @@ export const WorkspaceSimulator: React.FC = () => {
           window.removeEventListener('keydown', handleKeyDown);
           window.removeEventListener('keyup', handleKeyUp);
       };
-  }, [isActive, state, activeKeys]);
+  }, [isActive]);
 
   // Cleanup timeout on unmount
   useEffect(() => {

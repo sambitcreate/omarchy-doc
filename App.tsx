@@ -166,7 +166,6 @@ const App: React.FC = () => {
                 <div className="space-y-4">
                     <div className="text-xs text-omarchy-gray font-bold uppercase tracking-widest mb-4">Manual Contents</div>
                     <ul className="space-y-1 text-sm text-omarchy-fg/70">
-                        <li className="pl-2 border-l-2 border-transparent hover:border-omarchy-accent hover:text-omarchy-fg cursor-pointer py-1">Welcome to Omarchy</li>
                         <li 
                              onClick={() => handleNavClick('Getting Started')}
                              className={`pl-2 border-l-2 cursor-pointer py-1 transition-colors ${activePage === 'Getting Started' ? 'border-omarchy-accent text-omarchy-accent font-bold bg-omarchy-accent/5' : 'border-transparent hover:border-omarchy-accent hover:text-omarchy-fg'}`}
